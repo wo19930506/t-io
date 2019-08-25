@@ -10,7 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
-import org.tio.core.GroupContext;
+import org.tio.core.TioConfig;
 import org.tio.core.Tio;
 import org.tio.core.exception.AioDecodeException;
 import org.tio.core.intf.Packet;
@@ -41,6 +41,13 @@ public class WsServerAioHandler implements ServerAioHandler {
 	 * value: List<WsRequest>
 	 */
 	private static final String	NOT_FINAL_WEBSOCKET_PACKET_PARTS	= "TIO_N_F_W_P_P";
+	
+	/**
+	 * SEC_WEBSOCKET_KEY后缀
+	 */
+	private static final String SEC_WEBSOCKET_KEY_SUFFIX = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+	
+	private static final byte[] SEC_WEBSOCKET_KEY_SUFFIX_BYTES = SEC_WEBSOCKET_KEY_SUFFIX.getBytes();
 
 	private WsServerConfig wsServerConfig;
 
@@ -58,7 +65,7 @@ public class WsServerAioHandler implements ServerAioHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public WsRequest decode(ByteBuffer buffer, int limit, int position, int readableLength, ChannelContext channelContext) throws AioDecodeException {
-		WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
+		WsSessionContext wsSessionContext = (WsSessionContext) channelContext.get();
 		//		int initPosition = buffer.position();
 
 		if (!wsSessionContext.isHandshaked()) {//尚未握手
@@ -118,11 +125,14 @@ public class WsServerAioHandler implements ServerAioHandler {
 				
 				HttpRequest handshakeRequest = wsSessionContext.getHandshakeRequest();
 				if (websocketPacket.getWsOpcode() != Opcode.BINARY) {
-					try {
-						String text = new String(websocketPacket.getBody(), handshakeRequest.getCharset());
-						websocketPacket.setWsBodyText(text);
-					} catch (UnsupportedEncodingException e) {
-						log.error(e.toString(), e);
+					byte[] bodyBs = websocketPacket.getBody();
+					if (bodyBs != null) {
+						try {
+							String text = new String(bodyBs, handshakeRequest.getCharset());
+							websocketPacket.setWsBodyText(text);
+						} catch (UnsupportedEncodingException e) {
+							log.error(e.toString(), e);
+						}
 					}
 				}
 			}
@@ -132,22 +142,22 @@ public class WsServerAioHandler implements ServerAioHandler {
 	}
 
 	@Override
-	public ByteBuffer encode(Packet packet, GroupContext groupContext, ChannelContext channelContext) {
+	public ByteBuffer encode(Packet packet, TioConfig tioConfig, ChannelContext channelContext) {
 		WsResponse wsResponse = (WsResponse) packet;
 
 		// 握手包
 		if (wsResponse.isHandShake()) {
-			WsSessionContext imSessionContext = (WsSessionContext) channelContext.getAttribute();
+			WsSessionContext imSessionContext = (WsSessionContext) channelContext.get();
 			HttpResponse handshakeResponse = imSessionContext.getHandshakeResponse();
 			try {
-				return HttpResponseEncoder.encode(handshakeResponse, groupContext, channelContext);
+				return HttpResponseEncoder.encode(handshakeResponse, tioConfig, channelContext);
 			} catch (UnsupportedEncodingException e) {
 				log.error(e.toString(), e);
 				return null;
 			}
 		}
 
-		ByteBuffer byteBuffer = WsServerEncoder.encode(wsResponse, groupContext, channelContext);
+		ByteBuffer byteBuffer = WsServerEncoder.encode(wsResponse, tioConfig, channelContext);
 		return byteBuffer;
 	}
 
@@ -197,7 +207,7 @@ public class WsServerAioHandler implements ServerAioHandler {
 		WsRequest wsRequest = (WsRequest) packet;
 
 		if (wsRequest.isHandShake()) {//是握手包
-			WsSessionContext wsSessionContext = (WsSessionContext) channelContext.getAttribute();
+			WsSessionContext wsSessionContext = (WsSessionContext) channelContext.get();
 			HttpRequest request = wsSessionContext.getHandshakeRequest();
 			HttpResponse httpResponse = wsSessionContext.getHandshakeResponse();
 			HttpResponse r = wsMsgHandler.handshake(request, httpResponse, channelContext);
@@ -274,8 +284,19 @@ public class WsServerAioHandler implements ServerAioHandler {
 		String Sec_WebSocket_Key = headers.get(HttpConst.RequestHeaderKey.Sec_WebSocket_Key);
 
 		if (StrUtil.isNotBlank(Sec_WebSocket_Key)) {
-			String Sec_WebSocket_Key_Magic = Sec_WebSocket_Key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-			byte[] key_array = SHA1Util.SHA1(Sec_WebSocket_Key_Magic);
+			byte[] Sec_WebSocket_Key_Bytes = null;
+			try {
+				Sec_WebSocket_Key_Bytes = Sec_WebSocket_Key.getBytes(request.getCharset());
+			} catch (UnsupportedEncodingException e) {
+//				log.error(e.toString(), e);
+				throw new RuntimeException(e);
+			}
+			byte[] allBs = new byte[Sec_WebSocket_Key_Bytes.length + SEC_WEBSOCKET_KEY_SUFFIX_BYTES.length];
+			System.arraycopy(Sec_WebSocket_Key_Bytes, 0, allBs, 0, Sec_WebSocket_Key_Bytes.length);
+			System.arraycopy(SEC_WEBSOCKET_KEY_SUFFIX_BYTES, 0, allBs, Sec_WebSocket_Key_Bytes.length, SEC_WEBSOCKET_KEY_SUFFIX_BYTES.length);
+			
+//			String Sec_WebSocket_Key_Magic = Sec_WebSocket_Key + SEC_WEBSOCKET_KEY_SUFFIX_BYTES;
+			byte[] key_array = SHA1Util.SHA1(allBs);
 			String acceptKey = BASE64Util.byteArrayToBase64(key_array);
 			HttpResponse httpResponse = new HttpResponse(request);
 

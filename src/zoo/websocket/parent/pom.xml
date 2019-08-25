@@ -11,20 +11,16 @@
 	<parent>
 		<groupId>org.t-io</groupId>
 		<artifactId>tio-zoo-parent</artifactId>
-		<version>3.2.9.v20190401-RELEASE</version>
+		<version>3.5.0.v20190822-RELEASE</version>
 		<relativePath>../../parent/pom.xml</relativePath>
 	</parent>
-
-	<properties>
-		<tio-http.version>3.2.9.v20190401-RELEASE</tio-http.version>
-	</properties>
 
 
 	<modules>
 
 		<module>../common</module>
 		<module>../server</module>
-
+		<module>../client</module>
 	</modules>
 
 

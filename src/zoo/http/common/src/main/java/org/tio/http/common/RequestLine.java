@@ -11,20 +11,11 @@ import org.tio.utils.hutool.StrUtil;
  */
 public class RequestLine {
 	public Method	method;
-	public String	path;			//譬如http://www.163.com/user/get?value=tan&id=789，那些此值就是/user/get
-	private String	initPath;		//同path，只是path可能会被业务端修改，而这个是记录访问者访问的最原始path的
-	public String	queryString;	//譬如http://www.163.com/user/get?value=tan&id=789，那些此值就是name=tan&id=789
-	//	private String pathAndQuery;  //形如：/user/get?value=999
-	private String	protocol;
+	public String	path;			//譬如http://www.163.com/user/get?value=tan&id=789，那么此值就是/user/get
+	public String	initPath;		//同path，只是path可能会被业务端修改，而这个是记录访问者访问的最原始path的
+	public String	queryString;	//譬如http://www.163.com/user/get?value=tan&id=789，那么此值就是name=tan&id=789
+	public String	protocol;
 	public String	version;
-	//	private String line;
-
-	/**
-	 * @return the line
-	 */
-	//	public String getLine() {
-	//		return line;
-	//	}
 
 	/**
 	 * @return the method
@@ -136,7 +127,7 @@ public class RequestLine {
 		this.initPath = initPath;
 	}
 
-	/** 
+	/**
 	 * @return
 	 * @author tanyaowu
 	 */
@@ -166,6 +157,7 @@ public class RequestLine {
 		if (StrUtil.isNotBlank(queryString)) {
 			sb.append("?");//.append(queryString);
 			String[] keyValues = queryString.split("&");
+			int i = 0;
 			for (String keyValue : keyValues) {
 				String[] keyValueArray = keyValue.split("=");
 				if (keyValueArray.length == 2) {
@@ -180,8 +172,10 @@ public class RequestLine {
 					} else {
 						sb.append(name).append("=").append(URLEncoder.encode(value));
 					}
-
+					if (i != keyValues.length - 1)
+					  sb.append("&");
 				}
+				i++;
 			}
 		}
 		sb.append(" ");

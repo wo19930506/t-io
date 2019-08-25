@@ -8,14 +8,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.client.ClientChannelContext;
-import org.tio.client.ClientGroupContext;
+import org.tio.client.ClientTioConfig;
 import org.tio.client.ReconnConf;
 import org.tio.client.TioClient;
 import org.tio.core.Node;
 import org.tio.core.Tio;
 import org.tio.http.common.HttpConst;
 import org.tio.utils.Threads;
-import org.tio.utils.date.DateUtils;
+import org.tio.utils.hutool.DateUtil;
 import org.tio.utils.hutool.StrUtil;
 import org.tio.utils.thread.pool.SynThreadPoolExecutor;
 
@@ -35,7 +35,7 @@ public class HttpClientStarter {
 	private ReconnConf reconnConf = null;//new ReconnConf(5000L);
 
 	//一组连接共用的上下文对象
-	public ClientGroupContext clientGroupContext = new ClientGroupContext(httpClientAioHandler, httpClientAioListener, reconnConf);
+	public ClientTioConfig clientTioConfig = new ClientTioConfig(httpClientAioHandler, httpClientAioListener, reconnConf);
 
 	private TioClient tioClient = null;
 
@@ -80,10 +80,10 @@ public class HttpClientStarter {
 	}
 
 	/**
-	 * @return the clientGroupContext
+	 * @return the clientTioConfig
 	 */
-	public ClientGroupContext getClientGroupContext() {
-		return clientGroupContext;
+	public ClientTioConfig getClientTioConfig() {
+		return clientTioConfig;
 	}
 
 	private void init(SynThreadPoolExecutor tioExecutor, ThreadPoolExecutor groupExecutor) throws IOException {
@@ -91,9 +91,9 @@ public class HttpClientStarter {
 		//		if (StrUtil.isBlank(system_timer_period)) {
 		//			System.setProperty("tio.system.timer.period", "50");
 		//		}
-		clientGroupContext.setName("Tio Http Client");
-		clientGroupContext.statOn = false;
-		tioClient = new TioClient(clientGroupContext);
+		clientTioConfig.setName("Tio Http Client");
+		clientTioConfig.statOn = false;
+		tioClient = new TioClient(clientTioConfig);
 	}
 
 	public void stop() throws IOException {
@@ -123,8 +123,8 @@ public class HttpClientStarter {
 	public static void init() throws Exception {
 		httpClientStarter = new HttpClientStarter();
 		httpsClientStarter = new HttpClientStarter();
-		ClientGroupContext clientGroupContext = httpsClientStarter.getClientGroupContext();
-		clientGroupContext.useSsl();
+		ClientTioConfig clientTioConfig = httpsClientStarter.getClientTioConfig();
+		clientTioConfig.useSsl();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -175,7 +175,7 @@ public class HttpClientStarter {
 		receivedBytes = new AtomicLong();
 		receivedStageBytes = new AtomicLong();
 
-		System.out.println("start time:" + startTime + "(" + DateUtils.formatDateTime(new Date(startTime)) + ")");
+		System.out.println("start time:" + startTime + "(" + DateUtil.formatDateTime(new Date(startTime)) + ")");
 		ClientHttpRequest clientHttpRequest = ClientHttpRequest.get(requestPath, queryString);
 		for (int i = 0; i < clientCount; i++) {
 			for (int j = 0; j < requestCount; j++) {
@@ -280,7 +280,7 @@ public class HttpClientStarter {
 		receivedCount = new AtomicLong();
 		receivedStageCount = new AtomicLong();
 
-		System.out.println("start time:" + startTime + "(" + DateUtils.formatDateTime(new Date(startTime)) + ")");
+		System.out.println("start time:" + startTime + "(" + DateUtil.formatDateTime(new Date(startTime)) + ")");
 		ClientHttpRequest clientHttpRequest = ClientHttpRequest.get(path, queryString);
 		for (int i = 0; i < clientCount; i++) {
 			for (int j = 0; j < requestCount; j++) {

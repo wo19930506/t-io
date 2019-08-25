@@ -19,14 +19,6 @@ public class ResCompressorFactory {
 	}
 
 	/**
-	 * @param args
-	 * @author tanyaowu
-	 */
-	public static void main(String[] args) {
-
-	}
-
-	/**
 	 * 
 	 * @param extension
 	 * @return
@@ -34,12 +26,11 @@ public class ResCompressorFactory {
 	 */
 	public static ResCompressor get(String extension) {
 		if ("js".equalsIgnoreCase(extension)) {
-			//			return YuiJsCompressor.ME;
-			return TioJsCompressor.ME;
+			return TioJsCompressor.me;
 		} else if ("css".equalsIgnoreCase(extension)) {
-			return TioCssCompressor.ME;
+			return TioCssCompressor.me;
 		} else if ("html".equalsIgnoreCase(extension) || "htm".equalsIgnoreCase(extension)) {
-			return TioHtmlCompressor.ME;
+			return TioHtmlCompressor.me;
 		}
 
 		return null;
