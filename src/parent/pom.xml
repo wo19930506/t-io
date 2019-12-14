@@ -5,7 +5,7 @@
 	<groupId>org.t-io</groupId>
 	<artifactId>tio-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.5.0.v20190822-RELEASE</version>
+	<version>3.5.7.v20191115-RELEASE</version>
 	<name>${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 
@@ -35,7 +35,7 @@
 
 	<properties>
 		<maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
-		<tio-utils.version>3.5.0.v20190822-RELEASE</tio-utils.version>
+		<tio-utils.version>3.5.7.v20191115-RELEASE</tio-utils.version>
 		<tio-core.version>${tio-utils.version}</tio-core.version>
 		<tio-flash-policy-server.version>${tio-utils.version}</tio-flash-policy-server.version>
 
@@ -45,12 +45,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.test.skip>true</maven.test.skip>
-		<maven.version>3.5.0</maven.version>
+		<maven.version>3.6.0</maven.version>
 
-		<mysql.driver.version>8.0.17</mysql.driver.version><!-- 5.1.46 -->
-		<druid.version>1.1.19</druid.version>
-		<HikariCP.version>3.3.1</HikariCP.version>
-		<jfinal.version>4.2</jfinal.version>
+		<mysql.driver.version>8.0.18</mysql.driver.version><!-- 5.1.46 -->
+		<druid.version>1.1.21</druid.version>
+		<HikariCP.version>3.4.1</HikariCP.version>
+		<jfinal.version>4.7</jfinal.version>
 		<logback.version>1.2.3</logback.version>
 		<slf4j.version>1.7.26</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
@@ -60,26 +60,26 @@
 		<commons-io.version>2.6</commons-io.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-codec.version>1.13</commons-codec.version>
-		<commons-compress.version>1.18</commons-compress.version>
-		<fastjson.version>1.2.59</fastjson.version>
-		<testng.version>6.14.3</testng.version>
-		<hutool.version>4.6.2</hutool.version>
-		<protobuf-java.version>3.9.1</protobuf-java.version>
+		<commons-compress.version>1.19</commons-compress.version>
+		<fastjson.version>1.2.60</fastjson.version>
+		<testng.version>7.0.0</testng.version>
+		<hutool.version>5.0.7</hutool.version>
+		<protobuf-java.version>3.11.1</protobuf-java.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<protobuf-java-format.version>1.4</protobuf-java-format.version>
-		<protostuff.version>1.6.0</protostuff.version>
-		<redisson.version>3.11.2</redisson.version>
+		<protostuff.version>1.6.2</protostuff.version>
+		<redisson.version>3.11.6</redisson.version>
 		<jodd.version>5.1.0-20190624</jodd.version>
-		<quartz.version>2.3.1</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
 		<caffeine.version>2.8.0</caffeine.version>
-		<binarywang.version>3.5.0</binarywang.version>
+		<binarywang.version>3.6.0</binarywang.version>
 		<zxing.version>3.4.0</zxing.version>
-		<httpcore.version>4.4.11</httpcore.version>
-		<httpclient.version>4.5.9</httpclient.version>
-		<closure.version>v20190729</closure.version>
+		<httpcore.version>4.4.12</httpcore.version>
+		<httpclient.version>4.5.10</httpclient.version>
+		<closure.version>v20191111</closure.version>
 		<freemarker.version>2.3.29</freemarker.version>
 		<UserAgentUtils.version>1.21</UserAgentUtils.version>
-		<scribejava-apis.version>6.8.0</scribejava-apis.version>
+		<scribejava-apis.version>6.9.0</scribejava-apis.version>
 		<oltu.oauth2.version>1.0.2</oltu.oauth2.version>
 
 
@@ -103,9 +103,8 @@
 		<javacpp.version>1.4.4</javacpp.version>
 		<ffmpeg.version>4.1-${javacpp.version}</ffmpeg.version>
 		<opencv.version>4.0.1-${javacpp.version}</opencv.version>
-		<netty.version>4.1.36.Final</netty.version>
 
-		<IJPay.version>2.1.2</IJPay.version>
+		<IJPay.version>2.3.2</IJPay.version>
 
 
 		<shardingsphere.version>3.1.0</shardingsphere.version>
@@ -123,22 +122,15 @@
 		</developer>
 	</developers>
 
-	<repositories>
 
 
-	</repositories>
-	<pluginRepositories>
-
-
-
-	</pluginRepositories>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.1.7.RELEASE</version>
+				<version>2.2.1.RELEASE</version>
 				<type>pom</type>
 			</dependency>
 
@@ -320,7 +312,7 @@
 			<dependency>
 				<groupId>com.squareup.okhttp3</groupId>
 				<artifactId>okhttp</artifactId>
-				<version>4.1.0</version>
+				<version>4.2.2</version>
 			</dependency>
 
 
@@ -463,13 +455,13 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>28.0-jre</version>
+				<version>28.1-jre</version>
 			</dependency>
 
 			<dependency>
 				<groupId>nl.basjes.parse.useragent</groupId>
 				<artifactId>yauaa</artifactId>
-				<version>5.11</version>
+				<version>5.13</version>
 			</dependency>
 
 			<dependency>
@@ -502,13 +494,13 @@
 			<dependency>
 				<groupId>com.typesafe</groupId>
 				<artifactId>config</artifactId>
-				<version>1.3.4</version>
+				<version>1.4.0</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-text</artifactId>
-				<version>1.7</version>
+				<version>1.8</version>
 			</dependency>
 
 			<dependency>
@@ -548,7 +540,7 @@
 			<dependency>
 				<groupId>io.github.classgraph</groupId>
 				<artifactId>classgraph</artifactId>
-				<version>4.8.45</version>
+				<version>4.8.58</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thoughtworks.paranamer</groupId>
@@ -559,7 +551,7 @@
 			<dependency>
 				<groupId>org.mongodb</groupId>
 				<artifactId>mongo-java-driver</artifactId>
-				<version>3.11.0</version>
+				<version>3.11.2</version>
 			</dependency>
 
 			<dependency>
@@ -605,7 +597,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-configuration2</artifactId>
-				<version>2.5</version>
+				<version>2.6</version>
 			</dependency>
 			<dependency>
 				<groupId>org.nutz</groupId>
@@ -675,22 +667,8 @@
 			<dependency>
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
-				<version>3.5.5</version>
+				<version>3.5.6</version>
 			</dependency>
-
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-parent</artifactId>
-				<version>${netty.version}</version>
-				<type>pom</type>
-			</dependency>
-
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-all</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-
 
 			<!-- QQ登录 -->
 			<dependency>
@@ -741,7 +719,13 @@
 			</dependency>
 
 
-
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-bom</artifactId>
+				<version>4.1.43.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 
 			<dependency>
 				<groupId>com.yahoo.platform.yui</groupId>
@@ -803,7 +787,7 @@
 			<dependency>
 				<groupId>io.reactivex.rxjava2</groupId>
 				<artifactId>rxjava</artifactId>
-				<version>2.2.11</version>
+				<version>2.2.15</version>
 			</dependency>
 
 			<dependency>
@@ -872,6 +856,12 @@
 				<groupId>net.coobird</groupId>
 				<artifactId>thumbnailator</artifactId>
 				<version>0.4.8</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.lmax</groupId>
+				<artifactId>disruptor</artifactId>
+				<version>3.4.2</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -1185,5 +1175,19 @@
 			</distributionManagement>
 		</profile>
 	</profiles>
+
+
+	<repositories>
+		<!-- 非SSL的仓库，这个速度更快 -->
+		<repository>
+			<id>plain-repo</id>
+			<name>maven-public</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+
+	</pluginRepositories>
 
 </project>
